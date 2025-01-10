@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "https://rpmlegends.netlify.app/",
+  origin: process.env.FRONTEND_URL || "https://rpmlegends.netlify.app",
 }));
 
 app.use(express.json());
