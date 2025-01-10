@@ -1,0 +1,10 @@
+# Ignorar carpetas y archivos innecesarios
+node_modules
+*.log
+.env
+.DS_Store
+.vscode/
+.idea/
+
+# Local Netlify folder
+.netlify
