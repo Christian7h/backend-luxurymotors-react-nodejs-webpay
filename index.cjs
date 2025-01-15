@@ -9,16 +9,20 @@ const {
   IntegrationApiKeys,
   Environment,
 } = require("transbank-sdk");
+const { Resend } = require("resend");
+
 
 dotenv.config();
 
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://rpmlegends.netlify.app",
+    origin: process.env.FRONTEND_URL || "https://backend-luxurymotors-react-nodejs-webpay.onrender.com",
   })
 );
 app.use(express.json());
+const resend = new Resend("re_XkCapUu8_K88UuY86Z47YHevg3irjfBwt");
+
 
 // Configura la transacción con el entorno adecuado de integración
 const tx = new WebpayPlus.Transaction(
@@ -40,7 +44,7 @@ app.post("/api/create-transaction", async (req, res) => {
     }
     const buyOrder = Date.now().toString();
     const sessionId = Date.now().toString();
-    const returnUrl = "https://rpmlegends.netlify.app/checkout/confirm"; // URL de retorno
+    const returnUrl = "https://backend-luxurymotors-react-nodejs-webpay.onrender.com/checkout/confirm"; // URL de retorno
 
     console.log("Creating transaction with:", {
       buyOrder,
@@ -93,6 +97,29 @@ app.post("/api/confirm-transaction", async (req, res) => {
   } catch (error) {
     console.error("Error confirming transaction:", error.message);
     res.status(500).json({ error: "Error confirming transaction" });
+  }
+});
+
+app.post("/api/send-email", async (req, res) => {
+  try {
+    const { to, subject, reactTemplate } = req.body;
+
+    if (!to || !subject || !reactTemplate) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const response = await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: [to],
+      subject: subject,
+      html: reactTemplate,
+    });
+
+    console.log("Email sent successfully:", response);
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+    res.status(500).json({ error: "Error sending email" });
   }
 });
 
