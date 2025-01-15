@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://backend-luxurymotors-react-nodejs-webpay.onrender.com",
+    origin: process.env.FRONTEND_URL || "https://rpmlegends.netlify.app",
   })
 );
 app.use(express.json());
@@ -44,7 +44,7 @@ app.post("/api/create-transaction", async (req, res) => {
     }
     const buyOrder = Date.now().toString();
     const sessionId = Date.now().toString();
-    const returnUrl = "https://backend-luxurymotors-react-nodejs-webpay.onrender.com/checkout/confirm"; // URL de retorno
+    const returnUrl = "https://rpmlegends.netlify.app/checkout/confirm"; // URL de retorno
 
     console.log("Creating transaction with:", {
       buyOrder,
