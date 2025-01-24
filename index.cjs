@@ -33,7 +33,7 @@ const tx = new WebpayPlus.Transaction(
   )
 );
 
-// Almacenamiento temporal para customerInfo (en un entorno real, usa una base de datos)
+// Almacenamiento temporal para customerInfo (en un entorno real, usar una base de datos)
 const transactionData = {};
 
 app.post("/api/create-transaction", async (req, res) => {
