@@ -38,13 +38,13 @@ const transactionData = {};
 
 app.post("/api/create-transaction", async (req, res) => {
   try {
-    const { amount, customerInfo } = req.body;
+    const { amount, customerInfo,cartItems } = req.body;
     if (!amount || isNaN(amount) || amount <= 0) {
       return res.status(400).json({ error: "Invalid amount" });
     }
     const buyOrder = Date.now().toString();
     const sessionId = Date.now().toString();
-    const returnUrl = "https://rpmlegends.netlify.app/checkout/confirm"; // URL de retorno
+    const returnUrl = "https://rpmlegends.netlify.app/checkout/confirm"; // URL de retorno http://localhost:5173
 
     console.log("Creating transaction with:", {
       buyOrder,
@@ -52,13 +52,14 @@ app.post("/api/create-transaction", async (req, res) => {
       amount,
       returnUrl,
       customerInfo,
+      cartItems
     });
 
     const response = await tx.create(buyOrder, sessionId, amount, returnUrl);
     console.log("Transbank response:", response);
 
     // Almacena customerInfo temporalmente usando el token como clave
-    transactionData[response.token] = { customerInfo };
+    transactionData[response.token] = { customerInfo,cartItems };
 
     if (response.url) {
       // Devuelve la URL y el token de Webpay
@@ -85,7 +86,7 @@ app.post("/api/confirm-transaction", async (req, res) => {
     console.log("Transaction commit response:", response);
 
     // Recupera customerInfo almacenado temporalmente
-    const { customerInfo } = transactionData[token] || {};
+    const { customerInfo,cartItems } = transactionData[token] || {};
 
     res.json({
       status: response.status, // 'AUTHORIZED', 'FAILED', etc.
@@ -93,6 +94,7 @@ app.post("/api/confirm-transaction", async (req, res) => {
       amount: response.amount,
       cardLast4Digits: response.card_detail.card_number,
       customerInfo, // Devuelve los datos del formulario
+      cartItems
     });
   } catch (error) {
     console.error("Error confirming transaction:", error.message);
