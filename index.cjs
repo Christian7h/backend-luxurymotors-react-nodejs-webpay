@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://rpmlegends.netlify.app",
+    origin: process.env.FRONTEND_URL || "https://project-d61.pages.dev",
   })
 );
 app.use(express.json());
@@ -44,7 +44,7 @@ app.post("/api/create-transaction", async (req, res) => {
     }
     const buyOrder = Date.now().toString();
     const sessionId = Date.now().toString();
-    const returnUrl = "https://rpmlegends.netlify.app/checkout/confirm"; // URL de retorno http://localhost:5173
+    const returnUrl = "https://project-d61.pages.dev/checkout/confirm"; // URL de retorno http://localhost:5173
 
     console.log("Creating transaction with:", {
       buyOrder,
