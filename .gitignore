@@ -8,3 +8,6 @@ node_modules
 
 # Local Netlify folder
 .netlify
+
+BACKEND_IMPROVEMENTS.md
+index respaldo.cjs
